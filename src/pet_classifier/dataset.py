@@ -3,6 +3,12 @@ from torchvision.datasets import OxfordIIITPet
 from torch.utils.data import DataLoader
 from torchvision import transforms
 
+'''
+A module that creates transformations and DataLoaders for the OxfordIIITPet dataset.
+How to run:
+uv run python src/dataset.py
+'''
+
 # Transformations function
 def define_transformations(
     mean: tuple = (0.485, 0.456, 0.406),
@@ -75,3 +81,6 @@ def main():
     print(f"Total classes found: {len(classes)}")
     print(f"Image batch shape: {image.shape}")
     print(f"Label batch shape: {label.shape}")
+
+if __name__ == "__main__":
+    main()
