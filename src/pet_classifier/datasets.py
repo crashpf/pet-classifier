@@ -1,6 +1,7 @@
 from pathlib import Path
 from torchvision.datasets import OxfordIIITPet
 from torch.utils.data import DataLoader
+from torchvision import transforms
 
 def get_dataloaders(data_dir: str = "data", batch_size: int = 32, num_workers: int = 2):
 
@@ -39,3 +40,25 @@ def get_dataloaders(data_dir: str = "data", batch_size: int = 32, num_workers: i
 
     classes = train_dataset.classes
     return train_dataloader, test_dataloader, classes
+
+def define_transformations(
+    mean: tuple = (0.485, 0.456, 0.406),
+    std: tuple = (0.229, 0.224, 0.225)
+    ):
+
+    train_transforms = transforms.Compose([
+        transforms.Resize(size=(256, 256)),
+        transforms.RandomResizedCrop(224, scale=(0.8, 1.0)),
+        transforms.RandomHorizontalFlip(p=0.5),
+        transforms.ColorJitter(brightness=0.1, contrast=0.1),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=mean, std=std)
+    ])
+
+    test_transforms = transforms.Compose([
+        transforms.Resize((224,224)),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=mean, std=std)
+    ])
+
+    return train_transforms, test_transforms
