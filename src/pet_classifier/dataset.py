@@ -77,10 +77,20 @@ def main():
 
     train_dataloader, test_dataloader, classes = get_dataloaders(data_dir="data", batch_size=32, num_workers=2)
 
-    image, label = next(iter(train_dataloader))
-    print(f"Total classes found: {len(classes)}")
-    print(f"Image batch shape: {image.shape}")
-    print(f"Label batch shape: {label.shape}")
+    # 1. Check split sample counts
+    print(f"Train samples: {len(train_dataloader.dataset)}")
+    print(f"Test samples:  {len(test_dataloader.dataset)}")
 
+    # 2. Check total batch counts per split
+    print(f"Train batches: {len(train_dataloader)} (batch_size=32)")
+    print(f"Test batches:  {len(test_dataloader)} (batch_size=32)")
+
+    # 3. Pull one batch from each to confirm shapes and types
+    train_images, train_labels = next(iter(train_dataloader))
+    test_images, test_labels = next(iter(test_dataloader))
+
+    print(f"Train batch: images={train_images.shape}, labels={train_labels.shape}")
+    print(f"Test batch:  images={test_images.shape}, labels={test_labels.shape}")
+    print(f"Total classes found: {len(classes)}")
 if __name__ == "__main__":
     main()
