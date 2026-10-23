@@ -3,44 +3,7 @@ from torchvision.datasets import OxfordIIITPet
 from torch.utils.data import DataLoader
 from torchvision import transforms
 
-def get_dataloaders(data_dir: str = "data", batch_size: int = 32, num_workers: int = 2):
-
-    # Train Validation set
-    train_dataset = OxfordIIITPet(
-        root=data_dir,
-        split="trainval",
-        target_types="category",
-        transform=transform,
-        download=True
-    )
-
-    # Test set
-    test_dataset = OxfordIIITPet(
-        root=data_dir,
-        split="test",
-        target_types="category",
-        transform=transform,
-        download=True
-    )
-
-    # DataLoaders
-    train_dataloader = DataLoader(
-        dataset=train_dataset,
-        batch_size=batch_size,
-        shuffle=True,
-        num_workers=num_workers,
-    )
-
-    test_dataloader = DataLoader(
-        dataset=test_dataset,
-        batch_size=batch_size,
-        shuffle=False,
-        num_workers=num_workers,
-    )
-
-    classes = train_dataset.classes
-    return train_dataloader, test_dataloader, classes
-
+# Transformations function
 def define_transformations(
     mean: tuple = (0.485, 0.456, 0.406),
     std: tuple = (0.229, 0.224, 0.225)
@@ -62,3 +25,51 @@ def define_transformations(
     ])
 
     return train_transforms, test_transforms
+
+# DataLoaders function
+def get_dataloaders(data_dir: str = "data", batch_size: int = 32, num_workers: int = 2):
+
+    train_transforms, test_transforms = define_transformations()
+    # Train Validation set
+    train_dataset = OxfordIIITPet(
+        root=data_dir,
+        split="trainval",
+        target_types="category",
+        transform=train_transforms,
+        download=True
+    )
+
+    # Test set
+    test_dataset = OxfordIIITPet(
+        root=data_dir,
+        split="test",
+        target_types="category",
+        transform=test_transforms,
+        download=True
+    )
+
+    # DataLoaders
+    train_dataloader = DataLoader(
+        dataset=train_dataset,
+        batch_size=batch_size,
+        shuffle=True,
+        num_workers=num_workers,
+    )
+
+    test_dataloader = DataLoader(
+        dataset=test_dataset,
+        batch_size=batch_size,
+        shuffle=False,
+        num_workers=num_workers,
+    )
+
+    classes = train_dataset.classes
+    return train_dataloader, test_dataloader, classes
+
+def main():
+    print("Data loading pipeline")
+
+    train_dataloader, test_dataloader, classes = get_dataloaders(data_dir="data", batch_size=32, num_workers=2)
+
+    image, label = next(iter(train_dataloader))
+    
