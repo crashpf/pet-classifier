@@ -67,9 +67,11 @@ def get_dataloaders(data_dir: str = "data", batch_size: int = 32, num_workers: i
     return train_dataloader, test_dataloader, classes
 
 def main():
-    print("Data loading pipeline")
+    print("Running data loading pipeline...")
 
     train_dataloader, test_dataloader, classes = get_dataloaders(data_dir="data", batch_size=32, num_workers=2)
 
     image, label = next(iter(train_dataloader))
-    
+    print(f"Total classes found: {len(classes)}")
+    print(f"Image batch shape: {image.shape}")
+    print(f"Label batch shape: {label.shape}")
