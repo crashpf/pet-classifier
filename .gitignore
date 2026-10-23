@@ -8,3 +8,13 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Dataset and model artifacts
+data/
+models/
+
+# Local enviroment variables
+.env
