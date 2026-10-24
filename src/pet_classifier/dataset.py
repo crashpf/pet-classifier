@@ -1,4 +1,3 @@
-from pathlib import Path
 from torchvision.datasets import OxfordIIITPet
 from torch.utils.data import DataLoader
 from torchvision import transforms
@@ -92,5 +91,6 @@ def main():
     print(f"Train batch: images={train_images.shape}, labels={train_labels.shape}")
     print(f"Test batch:  images={test_images.shape}, labels={test_labels.shape}")
     print(f"Total classes found: {len(classes)}")
+    
 if __name__ == "__main__":
     main()
