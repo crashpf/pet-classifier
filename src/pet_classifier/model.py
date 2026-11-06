@@ -2,15 +2,48 @@ import torch
 import torch.nn as nn
 from torchvision.models import resnet18, ResNet18_Weights
 
-def get_model():
+def get_model(num_classes: int = 37, freeze_backbone: bool = True) -> nn.Module:
+    """
+    This function loads a resNet18 model with default weights and replaces
+    its final fully connected layer to match the number of classes in our dataset.
+    Args:
+        - num_classes (int): Number of output classes in the dataset.
+        - freeze_backbone (bool): If True it freezes the pretrained backbone 
+            parameters so that only the new fully connected layer is trained.
+            Switch to False if you want to fine-tune every model parameter.
+            Defaults to True.
 
-    weights = ResNet18_Weights.DEFAULT
+    Returns:
+        nn.Module: A resNet18 model with pretrained weights and a modified
+            fully connected layer for the target classification task. Keep in
+            mind that the new fully connected layer needs to be trained.
+    """
+    if not isinstance(num_classes, int) or num_classes < 1:
+        raise ValueError(f"num_classes must be an integer larger than 1, got {num_classes}")
+    
+    weights = ResNet18_Weights.DEFAULT 
     model = resnet18(weights=weights)
 
+    if freeze_backbone:
+        for param in model.parameters():
+            param.requires_grad = False
     
+    model.fc = nn.Linear(model.fc.in_features, num_classes)
+    # param.requires_grad = True by default when we create a new nn.Module
+    return model
 
 def main():
-    pass
+    print("")
+    model = get_model(num_classes=37, freeze_backbone=True)
+    total_params = sum(p.numel() for p in model.parameters())
+    trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    print(f"Total parameters: {total_params}")
+    print(f"Trainable parameters: {trainable_params}")
+
+    # Smoke test with dummy data
+    dummy_input = torch.randn(2, 3, 224, 224)
+    output = model(dummy_input)
+    print(f"Output shape: {output.shape}")
 
 if __name__ == "__main__":
     main()
