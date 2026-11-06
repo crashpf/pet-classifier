@@ -24,7 +24,7 @@ def get_model(num_classes: int = 37, freeze_backbone: bool = True) -> nn.Module:
     weights = ResNet18_Weights.DEFAULT 
     model = resnet18(weights=weights)
 
-    if freeze_backbone:
+    if freeze_backbone: # If true then freeze the whole model
         for param in model.parameters():
             param.requires_grad = False
     
@@ -34,13 +34,13 @@ def get_model(num_classes: int = 37, freeze_backbone: bool = True) -> nn.Module:
 
 def main():
     print("")
-    model = get_model(num_classes=37, freeze_backbone=True)
-    total_params = sum(p.numel() for p in model.parameters())
-    trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    model = get_model(num_classes=37, freeze_backbone=True) # defaults
+    total_params = sum(p.numel() for p in model.parameters()) # total parameters of the model
+    trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad) # trainable parameters of the model
     print(f"Total parameters: {total_params}")
     print(f"Trainable parameters: {trainable_params}")
 
-    # Smoke test with dummy data
+    # Smoke test with dummy data to inspect shapes
     dummy_input = torch.randn(2, 3, 224, 224)
     output = model(dummy_input)
     print(f"Output shape: {output.shape}")
