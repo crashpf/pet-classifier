@@ -24,7 +24,7 @@ def define_transformations(
     ])
 
     test_transforms = transforms.Compose([
-        transforms.Resize((224,224)),
+        transforms.Resize(size=(256, 256)),
         transforms.ToTensor(),
         transforms.Normalize(mean=mean, std=std)
     ])
