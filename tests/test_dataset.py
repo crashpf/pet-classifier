@@ -8,6 +8,7 @@ import pytest
 
 from pet_classifier.dataset import _split_indices, get_dataloaders
 
+
 # Fast tests: no images involved, just the splitting logic.
 def test_split_has_no_overlap_and_covers_everything():
     train_idx, val_idx = _split_indices(n=100, val_fraction=0.2, seed=42)

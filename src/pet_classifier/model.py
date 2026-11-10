@@ -1,6 +1,7 @@
 import torch
-import torch.nn as nn
-from torchvision.models import resnet18, ResNet18_Weights
+from torch import nn
+from torchvision.models import ResNet18_Weights, resnet18
+
 
 def get_model(num_classes: int = 37, freeze_backbone: bool = True) -> nn.Module:
     """
@@ -19,7 +20,7 @@ def get_model(num_classes: int = 37, freeze_backbone: bool = True) -> nn.Module:
             mind that the new fully connected layer needs to be trained.
     """
     if not isinstance(num_classes, int) or num_classes < 1:
-        raise ValueError(f"num_classes must be an integer larger than 1, got {num_classes}")
+        raise ValueError(f"num_classes must be an integer greater than or equal 1, got {num_classes}")
     
     weights = ResNet18_Weights.DEFAULT 
     model = resnet18(weights=weights)
@@ -33,7 +34,7 @@ def get_model(num_classes: int = 37, freeze_backbone: bool = True) -> nn.Module:
     return model
 
 def main():
-    print("")
+    print()
     model = get_model(num_classes=37, freeze_backbone=True) # defaults
     total_params = sum(p.numel() for p in model.parameters()) # total parameters of the model
     trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad) # trainable parameters of the model
