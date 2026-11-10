@@ -29,32 +29,10 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 
 from pet_classifier.dataset import get_dataloaders
-from pet_classifier.model import get_model
+from pet_classifier.model import get_model, load_model
 from pet_classifier.train import get_device
 
 logger = logging.getLogger(__name__)
-
-
-def load_model(checkpoint_path: Path, device: torch.device) -> tuple[nn.Module, list[str]]:
-    """Rebuild the model from a checkpoint saved by train.save_checkpoint.
-
-    Returns:
-        (model in eval mode on `device`, list of class names)
-    """
-    checkpoint = torch.load(checkpoint_path, map_location=device, weights_only=True)
-
-    # Rebuild the same architecture with the same output size, then load the
-    # trained weights into it. freeze_backbone doesn't matter here: it only
-    # affects training, and we never train this model.
-    model = get_model(num_classes=checkpoint["num_classes"])
-    model.load_state_dict(checkpoint["model_state_dict"])
-    model.to(device).eval()
-
-    logger.info(
-        "Loaded %s (epoch %d, val acc %.3f)",
-        checkpoint_path, checkpoint["epoch"], checkpoint["val_metrics"]["acc"],
-    )
-    return model, checkpoint["classes"]
 
 
 @torch.inference_mode()
