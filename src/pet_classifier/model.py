@@ -2,6 +2,11 @@ import torch
 from torch import nn
 from torchvision.models import ResNet18_Weights, resnet18
 
+import logging
+from pathlib import Path
+
+logger = logging.getLogger(__name__)
+
 
 def get_model(num_classes: int = 37, freeze_backbone: bool = True) -> nn.Module:
     """
