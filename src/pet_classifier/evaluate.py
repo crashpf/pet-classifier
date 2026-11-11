@@ -29,7 +29,7 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 
 from pet_classifier.dataset import get_dataloaders
-from pet_classifier.model import get_model, load_model
+from pet_classifier.model import load_model
 from pet_classifier.train import get_device
 
 logger = logging.getLogger(__name__)
